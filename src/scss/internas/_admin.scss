@@ -1,0 +1,41 @@
+.header {
+    background-color: $amarillo;
+}
+
+.alerta {
+    padding: .5rem;
+    text-align: center;
+    font-weight: $bold;
+    text-transform: uppercase;
+    margin-top: 1rem;
+
+    &.error {
+        background-color: $amarillo;
+    }
+
+    &.exito {
+        background-color: $azul;
+        color: white;
+    }
+}
+
+
+.clientes {
+    margin-top: 4rem;
+    width: 100%;
+    border-spacing: 0;
+
+    thead {
+        background-color: $azul;
+
+        th {
+            color: $blanco;
+            padding: 2rem;
+        }
+    }
+
+    td {
+        padding: .5rem 0;
+        text-align: center;
+    }
+}

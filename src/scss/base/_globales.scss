@@ -32,7 +32,10 @@ picture {
 
 h1, h2, h3 {
     font-family: $fuente_principal;
-    margin: $separacion / 2 0;
+    color: $azul;
+    text-transform: uppercase;
+    padding: 0;
+    margin: 0;
     text-align: center;
     
 }
@@ -52,12 +55,28 @@ h4 {
     font-size: 2rem;
 }
 
-.boton {
+.boton-azul{
     background-color: $azul;
     font-size: 2rem;
-    color: $amarillo;
+    color: white;
     border-radius: 5rem;
     padding: 1rem 2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.boton-amarillo {
+    background-color: $amarillo;
+    font-size: 2rem;
+    color: black;
+    border-radius: 5rem;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 
     &:hover {
         cursor: pointer;

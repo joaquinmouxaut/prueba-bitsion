@@ -1,4 +1,11 @@
 <?php
+    //Validar la URL por ID valido
+    $idcliente = $_GET['idcliente'];
+    $idcliente = filter_var( $idcliente, FILTER_VALIDATE_INT );
+    if( !$idcliente ) {
+        header( 'Location: ../index.php' );
+    }
+
     //Importar conexion
     require '../../includes/config/database.php';
     $db = conectarDB();
@@ -90,7 +97,7 @@
     </header>
 
     <main class="contenedor">
-        <h2>Nuevo Cliente</h2>
+        <h2>Editar Cliente</h2>
 
         <a href="../index.php" class="boton-azul">Volver</a>
 
@@ -165,7 +172,7 @@
 
             </fieldset>
 
-            <input type="submit" value="Registrar Cliente" class="boton-azul">
+            <input type="submit" value="Guardar Cambios" class="boton-azul">
         </form>
     </main>
     
