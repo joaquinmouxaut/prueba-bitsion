@@ -1,4 +1,11 @@
 <?php
+    // Verificar autenticacion
+    require '../../includes/funciones.php';
+    $auth = estaAutenticado();
+    if(!$auth) {
+        header('Location: ../../');
+    }
+
     //Importar conexion
     require '../../includes/config/database.php';
     $db = conectarDB();
@@ -54,10 +61,6 @@
             $errores[] = 'Debes añadir un productor asignado';
         }
 
-        // echo '<pre>';
-        // var_dump( $errores );
-        // echo '</pre>';
-
         //Revisar que el array de errores este vacio
         if( empty( $errores ) ) {
 
@@ -87,6 +90,12 @@
 <body>
     <header class="header">
         <h1>Ficticia S.A.</h1>
+
+        <div class="cerrar">
+            <?php if($auth) : ?>
+                <a href="../../cerrar-cesion.php" class="boton-amarillo">Cerrar Cesión</a>
+            <?php endif ?>
+        </div>
     </header>
 
     <main class="contenedor">
@@ -112,16 +121,16 @@
 
                 <label for="genero">Genero</label>
                 <select id="genero" name="genero">
-                    <option value="">-- Seleccione --</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Masculino">Masculino</option>
+                    <option value="" <?php echo $genero == "" ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="Femenino" <?php echo $genero == "Femenino" ? 'selected' : '' ?>>Femenino</option>
+                    <option value="Masculino" <?php echo $genero == "Masculino" ? 'selected' : '' ?>>Masculino</option>
                 </select>
 
                 <label for="estado">Estado</label>
                 <select id="estado" name="estado">
-                    <option value="">-- Seleccione --</option>
-                    <option value="Activo">Activo</option>
-                    <option value="No Activo">No Activo</option>
+                    <option value="" <?php echo $estado == "" ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="Activo" <?php echo $estado == "Activo" ? 'selected' : '' ?>>Activo</option>
+                    <option value="No Activo" <?php echo $estado == "No Activo" ? 'selected' : '' ?>>No Activo</option>
                 </select>
             </fieldset>
 
@@ -130,23 +139,23 @@
 
                 <label for="maneja">¿Maneja?</label>
                 <select id="maneja" name="maneja">
-                    <option value="">-- Seleccione --</option>
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="" <?php echo $maneja == "" ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="No" <?php echo $maneja == "No" ? 'selected' : '' ?>>No</option>
+                    <option value="Si" <?php echo $maneja == "Si" ? 'selected' : '' ?>>Si</option>
                 </select>
 
                 <label for="usalentes">¿Usa lentes?</label>
                 <select id="usalentes" name="usalentes">
-                    <option value="">-- Seleccione --</option>
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="" <?php echo $usalentes == "" ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="No" <?php echo $usalentes == "No" ? 'selected' : '' ?>>No</option>
+                    <option value="Si" <?php echo $usalentes == "Si" ? 'selected' : '' ?>>Si</option>
                 </select>
 
                 <label for="diabetico">¿Es Diabetico?</label>
                 <select id="diabetico" name="diabetico">
-                    <option value="">-- Seleccione --</option>
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="" <?php echo $diabetico == "" ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="No" <?php echo $diabetico == "No" ? 'selected' : '' ?>>No</option>
+                    <option value="Si" <?php echo $diabetico == "Si" ? 'selected' : '' ?>>Si</option>
                 </select>
 
                 <label for="enfermedades">Otras enfermedades</label>
@@ -158,9 +167,9 @@
 
                 <label for="idproductor">Productor Asignado</label>
                 <select id="idproductor" name="idproductor">
-                    <option value="">-- Seleccione --</option>
-                    <option value="1">Juan Perez</option>
-                    <option value="2">Pedro Gonzalez</option>
+                    <option value="" <?php echo $idproductor == "" ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="1" <?php echo $idproductor == "1" ? 'selected' : '' ?>>Juan Perez</option>
+                    <option value="2" <?php echo $idproductor == "2" ? 'selected' : '' ?>>Pedro Gonzalez</option>
                 </select>
 
             </fieldset>

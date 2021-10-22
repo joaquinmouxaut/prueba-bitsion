@@ -1,5 +1,8 @@
 .header {
     background-color: $amarillo;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .alerta {
@@ -37,5 +40,9 @@
     td {
         padding: .5rem 0;
         text-align: center;
+    }
+
+    .eliminar {
+        display: inline-block;
     }
 }

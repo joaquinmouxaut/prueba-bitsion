@@ -1,4 +1,11 @@
 <?php
+    // Verificar autenticacion
+    require '../includes/funciones.php';
+    $auth = estaAutenticado();
+    if(!$auth) {
+        header('Location: ../');
+    }
+
     //Importar conexion
     require '../includes/config/database.php';
     $db = conectarDB();
@@ -11,6 +18,21 @@
 
     //Consultar la BD
     $resultadoConsulta = mysqli_query( $db, $query );
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST' ) {
+        $idcliente = $_POST['idcliente'];
+        $idcliente = filter_var($idcliente, FILTER_VALIDATE_INT);
+        if($idcliente) {
+            //Eliminar la propiedad
+            $query = "DELETE FROM clientes WHERE idcliente = ${idcliente}";
+
+            $resultado = mysqli_query($db, $query);
+
+            if($resultado) {
+                header('location: index.php?resultado=3');
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +47,12 @@
 <body>
     <header class="header">
         <h1>Ficticia S.A.</h1>
+
+        <div class="cerrar">
+            <?php if($auth) : ?>
+                <a href="../cerrar-cesion.php" class="boton-amarillo">Cerrar Cesión</a>
+            <?php endif ?>
+        </div>
     </header>
 
     <main class="contenedor">
@@ -62,7 +90,10 @@
                     <td><?php echo $cliente['estado']; ?></td>
                     <td>
                         <a href="./clientes/editar.php?idcliente=<?php echo $cliente['idcliente']; ?>" class="boton-azul">Editar</a>
-                        <a href="#" class="boton-amarillo">Eliminar</a>
+                        <form method="POST" class="eliminar">
+                            <input type="hidden" name="idcliente" value="<?php echo $cliente['idcliente']; ?>">
+                            <input type="submit" value="Eliminar" class="boton-amarillo">
+                        </form>
                     </td>
                 </tr>
                 <?php endwhile ?>

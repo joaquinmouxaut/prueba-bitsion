@@ -1,4 +1,11 @@
 <?php
+    // Verificar autenticacion
+    require '../../includes/funciones.php';
+    $auth = estaAutenticado();
+    if(!$auth) {
+        header('Location: ../../');
+    }
+
     //Validar la URL por ID valido
     $idcliente = $_GET['idcliente'];
     $idcliente = filter_var( $idcliente, FILTER_VALIDATE_INT );
@@ -10,18 +17,24 @@
     require '../../includes/config/database.php';
     $db = conectarDB();
 
+    //Consultar datos de la propiedad
+    $consulta = "SELECT * FROM clientes WHERE idcliente = ${idcliente}";
+    $resultado = mysqli_query( $db, $consulta );
+    $cliente = mysqli_fetch_assoc( $resultado );
+    
+
     //Arreglo con mensajes de errores
     $errores = [];
 
-    $nombrecompleto = '';
-    $edad = '';
-    $genero = '';
-    $estado = '';
-    $maneja = '';
-    $usalentes = '';
-    $diabetico = '';
-    $enfermedades = '';
-    $idproductor = '';
+    $nombrecompleto = $cliente['nombrecompleto'];
+    $edad = $cliente['edad'];
+    $genero = $cliente['genero'];
+    $estado = $cliente['estado'];
+    $maneja = $cliente['maneja'];
+    $usalentes = $cliente['usalentes'];
+    $diabetico = $cliente['diabetico'];
+    $enfermedades = $cliente['enfermedades'];
+    $idproductor = $cliente['idproductor'];
 
     //Ejecutar el codigo luego que el usuario envia el formulario
     if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
@@ -61,21 +74,17 @@
             $errores[] = 'Debes añadir un productor asignado';
         }
 
-        // echo '<pre>';
-        // var_dump( $errores );
-        // echo '</pre>';
-
         //Revisar que el array de errores este vacio
         if( empty( $errores ) ) {
 
             //Insertar en la Base de Datos
-            $query = "INSERT INTO clientes ( nombrecompleto, edad, genero, estado, maneja, usalentes, diabetico, enfermedades, idproductor ) VALUES ( '$nombrecompleto', '$edad', '$genero', '$estado', '$maneja', '$usalentes', '$diabetico', '$enfermedades', '$idproductor' )";
+            $query = "UPDATE clientes SET nombrecompleto = '${nombrecompleto}', edad = '${edad}', genero = '${genero}', estado = '${estado}', maneja = '${maneja}', usalentes = '${usalentes}', diabetico = '${diabetico}', enfermedades = '${enfermedades}', idproductor = '${idproductor}' WHERE idcliente = '${idcliente}'";
         
             $resultado = mysqli_query( $db, $query );
 
             if( $resultado ) {
                 //Redireccionar al usuario
-                header( 'Location: ../index.php?resultado=1' );
+                header( 'Location: ../index.php?resultado=2' );
             }
         }
     }
@@ -94,6 +103,12 @@
 <body>
     <header class="header">
         <h1>Ficticia S.A.</h1>
+
+        <div class="cerrar">
+            <?php if($auth) : ?>
+                <a href="../../cerrar-cesion.php" class="boton-amarillo">Cerrar Cesión</a>
+            <?php endif ?>
+        </div>
     </header>
 
     <main class="contenedor">
@@ -107,7 +122,7 @@
         </div>
         <?php endforeach ?>
 
-        <form class="formulario" method="POST" action="../clientes/crear.php">
+        <form class="formulario" method="POST">
             <fieldset>
                 <legend>Info Cliente</legend>
 
@@ -119,16 +134,16 @@
 
                 <label for="genero">Genero</label>
                 <select id="genero" name="genero">
-                    <option value="">-- Seleccione --</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Masculino">Masculino</option>
+                    <option value="" <?php echo $genero == $cliente['genero'] ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="Femenino" <?php echo $genero == $cliente['genero'] ? 'selected' : '' ?>>Femenino</option>
+                    <option value="Masculino" <?php echo $genero == $cliente['genero'] ? 'selected' : '' ?>>Masculino</option>
                 </select>
 
                 <label for="estado">Estado</label>
                 <select id="estado" name="estado">
-                    <option value="">-- Seleccione --</option>
-                    <option value="Activo">Activo</option>
-                    <option value="No Activo">No Activo</option>
+                    <option value="" <?php echo $estado == $cliente['estado'] ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="Activo" <?php echo $estado == $cliente['estado'] ? 'selected' : '' ?>>Activo</option>
+                    <option value="No Activo" <?php echo $estado == $cliente['estado'] ? 'selected' : '' ?>>No Activo</option>
                 </select>
             </fieldset>
 
@@ -137,23 +152,23 @@
 
                 <label for="maneja">¿Maneja?</label>
                 <select id="maneja" name="maneja">
-                    <option value="">-- Seleccione --</option>
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="" <?php echo $maneja == $cliente['maneja'] ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="No" <?php echo $maneja == $cliente['maneja'] ? 'selected' : '' ?>>No</option>
+                    <option value="Si" <?php echo $maneja == $cliente['maneja'] ? 'selected' : '' ?>>Si</option>
                 </select>
 
                 <label for="usalentes">¿Usa lentes?</label>
                 <select id="usalentes" name="usalentes">
-                    <option value="">-- Seleccione --</option>
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="" <?php echo $usalentes == $cliente['usalentes'] ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="No" <?php echo $usalentes == $cliente['usalentes'] ? 'selected' : '' ?>>No</option>
+                    <option value="Si" <?php echo $usalentes == $cliente['usalentes'] ? 'selected' : '' ?>>Si</option>
                 </select>
 
                 <label for="diabetico">¿Es Diabetico?</label>
                 <select id="diabetico" name="diabetico">
-                    <option value="">-- Seleccione --</option>
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="" <?php echo $diabetico == $cliente['diabetico'] ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="No" <?php echo $diabetico == $cliente['diabetico'] ? 'selected' : '' ?>>No</option>
+                    <option value="Si" <?php echo $diabetico == $cliente['diabetico'] ? 'selected' : '' ?>>Si</option>
                 </select>
 
                 <label for="enfermedades">Otras enfermedades</label>
@@ -165,9 +180,9 @@
 
                 <label for="idproductor">Productor Asignado</label>
                 <select id="idproductor" name="idproductor">
-                    <option value="">-- Seleccione --</option>
-                    <option value="1">Juan Perez</option>
-                    <option value="2">Pedro Gonzalez</option>
+                    <option value="" <?php echo $idproductor == $cliente['idproductor'] ? 'selected' : '' ?>>-- Seleccione --</option>
+                    <option value="1" <?php echo $idproductor == $cliente['idproductor'] ? 'selected' : '' ?>>Juan Perez</option>
+                    <option value="2" <?php echo $idproductor == $cliente['idproductor'] ? 'selected' : '' ?>>Pedro Gonzalez</option>
                 </select>
 
             </fieldset>
